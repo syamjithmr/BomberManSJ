@@ -9,7 +9,6 @@
 
 ABomberManSJPlayerController::ABomberManSJPlayerController()
 {
-	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Crosshairs;
 }
 
