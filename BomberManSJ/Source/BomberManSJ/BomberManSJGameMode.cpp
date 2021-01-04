@@ -9,11 +9,4 @@ ABomberManSJGameMode::ABomberManSJGameMode()
 {
 	// use our custom PlayerController class
 	PlayerControllerClass = ABomberManSJPlayerController::StaticClass();
-
-	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/TopDownCPP/Blueprints/TopDownCharacter"));
-	if (PlayerPawnBPClass.Class != NULL)
-	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
 }
