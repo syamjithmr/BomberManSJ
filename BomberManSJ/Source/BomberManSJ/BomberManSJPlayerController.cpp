@@ -22,6 +22,8 @@ void ABomberManSJPlayerController::SetupInputComponent()
 	// set up gameplay key bindings
 	Super::SetupInputComponent();
 
+	InputComponent->BindAction("PlaceBomb", EInputEvent::IE_Pressed, this, &ABomberManSJPlayerController::PlaceBomb);
+
 	InputComponent->BindAxis("MoveForward", this, &ABomberManSJPlayerController::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &ABomberManSJPlayerController::MoveRight);
 }
@@ -34,4 +36,9 @@ void ABomberManSJPlayerController::MoveForward(float MoveRate)
 void ABomberManSJPlayerController::MoveRight(float MoveRate)
 {
 	GetPawn()->AddMovementInput(FVector::RightVector, MoveRate);
+}
+
+void ABomberManSJPlayerController::PlaceBomb()
+{
+	Cast<ABomberManSJCharacter>(GetPawn())->PlaceBomb();
 }

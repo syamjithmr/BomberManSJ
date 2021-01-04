@@ -17,7 +17,9 @@ public:
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
 
-private:
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class ABomb> BombClass;
 	
+	void PlaceBomb();
 };
 

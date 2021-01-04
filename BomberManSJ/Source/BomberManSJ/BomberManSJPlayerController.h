@@ -23,6 +23,7 @@ protected:
 	//Methods added by me.
 	void MoveForward(float MoveRate);
 	void MoveRight(float MoveRate);
+	void PlaceBomb();
 };
 
 
