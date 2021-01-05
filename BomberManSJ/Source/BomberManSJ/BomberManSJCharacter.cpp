@@ -24,6 +24,7 @@ ABomberManSJCharacter::ABomberManSJCharacter()
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
 	AvailableBombs = 1;
+	IsDead = false;
 
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;

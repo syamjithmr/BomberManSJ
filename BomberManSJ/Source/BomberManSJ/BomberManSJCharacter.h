@@ -17,11 +17,14 @@ public:
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
 
+
+	UPROPERTY(BlueprintReadWrite)
+		bool IsDead;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ABomb> BombClass;
 	UPROPERTY(BlueprintReadWrite)
 		FVector CurrTilePos;
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int AvailableBombs;
 	FVector WallExtent;
 

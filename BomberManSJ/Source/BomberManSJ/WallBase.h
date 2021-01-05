@@ -15,7 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	AWallBase();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		bool IsBreakabale;
 
 protected:
