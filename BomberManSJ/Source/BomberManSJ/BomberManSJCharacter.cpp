@@ -2,8 +2,10 @@
 
 #include "BomberManSJCharacter.h"
 #include "Bomb.h"
+#include "WallBase.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ABomberManSJCharacter::ABomberManSJCharacter()
 {
@@ -21,9 +23,20 @@ ABomberManSJCharacter::ABomberManSJCharacter()
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
+	AvailableBombs = 1;
+
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+}
+
+// Called when the game starts or when spawned
+void ABomberManSJCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	FVector temp;
+	UGameplayStatics::GetActorOfClass(GetWorld(), AWallBase::StaticClass())->GetActorBounds(false, temp, WallExtent);
 }
 
 void ABomberManSJCharacter::Tick(float DeltaSeconds)
@@ -33,5 +46,11 @@ void ABomberManSJCharacter::Tick(float DeltaSeconds)
 
 void ABomberManSJCharacter::PlaceBomb()
 {
-	GetWorld()->SpawnActor<ABomb>(BombClass, GetTransform());
+	if (AvailableBombs > 0)
+	{
+		ABomb* currBomb = GetWorld()->SpawnActor<ABomb>(BombClass, CurrTilePos, FRotator::ZeroRotator);
+		currBomb->ParentPlayer = this;
+		currBomb->InitBlastLocations();
+		AvailableBombs--;
+	}
 }

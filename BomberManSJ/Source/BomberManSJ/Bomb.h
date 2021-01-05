@@ -17,9 +17,12 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* BombMesh;
-	UPROPERTY(EditAnywhere)
-		class UParticleSystem* BombBlastEffect;
-	class UParticleSystemComponent* BombBlastComponent;
+	UPROPERTY(BlueprintReadOnly)
+		class ABomberManSJCharacter* ParentPlayer;
+	UPROPERTY(BlueprintReadOnly)
+		TArray<FVector> BlastLocations;
+	int BombPower;
+	FVector BombExtent;
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,4 +32,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void InitBlastLocations();
 };

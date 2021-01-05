@@ -19,7 +19,17 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ABomb> BombClass;
-	
+	UPROPERTY(BlueprintReadWrite)
+		FVector CurrTilePos;
+	UPROPERTY(BlueprintReadWrite)
+		int AvailableBombs;
+	FVector WallExtent;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:
 	void PlaceBomb();
 };
 

@@ -1,11 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BomberManSJPlayerController.h"
-#include "Blueprint/AIBlueprintHelperLibrary.h"
-#include "Runtime/Engine/Classes/Components/DecalComponent.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
 #include "BomberManSJCharacter.h"
-#include "Engine/World.h"
 
 ABomberManSJPlayerController::ABomberManSJPlayerController()
 {
