@@ -15,7 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	ABomb();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		class UStaticMeshComponent* BombMesh;
 	UPROPERTY(BlueprintReadOnly)
 		class ABomberManSJCharacter* ParentPlayer;

@@ -24,7 +24,7 @@ public:
 		TSubclassOf<class ABomb> BombClass;
 	UPROPERTY(BlueprintReadWrite)
 		FVector CurrTilePos;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int AvailableBombs;
 	FVector WallExtent;
 

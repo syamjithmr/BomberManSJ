@@ -47,7 +47,7 @@ void ABomberManSJCharacter::Tick(float DeltaSeconds)
 
 void ABomberManSJCharacter::PlaceBomb()
 {
-	if (AvailableBombs > 0)
+	if (AvailableBombs > 0 && !IsDead)
 	{
 		ABomb* currBomb = GetWorld()->SpawnActor<ABomb>(BombClass, CurrTilePos, FRotator::ZeroRotator);
 		currBomb->ParentPlayer = this;
