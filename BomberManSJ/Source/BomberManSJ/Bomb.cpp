@@ -18,7 +18,7 @@ ABomb::ABomb()
 	BombMesh = CreateDefaultSubobject<UStaticMeshComponent>("Bomb Mesh");
 	BombMesh->SetupAttachment(RootComponent);
 
-	BombPower = 3;
+	BombPower = 1;
 }
 
 // Called when the game starts or when spawned

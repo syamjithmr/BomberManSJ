@@ -24,6 +24,7 @@ ABomberManSJCharacter::ABomberManSJCharacter()
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
 	AvailableBombs = 1;
+	BombPower = 1;
 	IsDead = false;
 
 	// Activate ticking in order to update the cursor every frame.
@@ -51,6 +52,7 @@ void ABomberManSJCharacter::PlaceBomb()
 	{
 		ABomb* currBomb = GetWorld()->SpawnActor<ABomb>(BombClass, CurrTilePos, FRotator::ZeroRotator);
 		currBomb->ParentPlayer = this;
+		currBomb->BombPower = BombPower;
 		currBomb->InitBlastLocations();
 		AvailableBombs--;
 	}
