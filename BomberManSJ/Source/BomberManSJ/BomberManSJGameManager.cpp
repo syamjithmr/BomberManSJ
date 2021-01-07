@@ -46,7 +46,7 @@ void ABomberManSJGameManager::ConvertSecondsToMinutes()
 	TimeRemainingText = FString::Printf(TEXT("%02d:%02d"), minutes, seconds);
 }
 
-void ABomberManSJGameManager::GameWon(ABomberManSJCharacter* Winner)
+void ABomberManSJGameManager::GameWon_Implementation(ABomberManSJCharacter* Winner)
 {
 	GetWorldTimerManager().PauseTimer(TimeRemainingTimerHandle);
 	WinnerName = Winner->PlayerName;
@@ -61,7 +61,7 @@ void ABomberManSJGameManager::GameWon(ABomberManSJCharacter* Winner)
 		GameWonUI->AddToViewport();
 }
 
-void ABomberManSJGameManager::GameDraw()
+void ABomberManSJGameManager::GameDraw_Implementation()
 {
 	GetWorldTimerManager().PauseTimer(TimeRemainingTimerHandle);
 	IsDraw = true;

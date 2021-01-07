@@ -33,7 +33,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Widgets")
 		TSubclassOf<class UUserWidget> GameWonUIClass;
 	UUserWidget* GameWonUI;
-	void GameWon(class ABomberManSJCharacter* Winner);
+	UFUNCTION(BlueprintNativeEvent)
+		void GameWon(class ABomberManSJCharacter* Winner);
+	virtual void GameWon_Implementation(class ABomberManSJCharacter* Winner);
 	UPROPERTY(BlueprintReadOnly)
 		FString WinnerName;
 
@@ -42,7 +44,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Widgets")
 		TSubclassOf<class UUserWidget> GameDrawUIClass;
 	UUserWidget* GameDrawUI;
-	void GameDraw();
+	UFUNCTION(BlueprintNativeEvent)
+		void GameDraw();
+	void GameDraw_Implementation();
 
 	UPROPERTY(BlueprintReadWrite)
 		bool BlastIsChained;
