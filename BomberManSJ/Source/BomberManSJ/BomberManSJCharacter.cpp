@@ -3,6 +3,7 @@
 #include "BomberManSJCharacter.h"
 #include "Bomb.h"
 #include "WallBase.h"
+#include "BomberManSJGameInstance.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -23,10 +24,6 @@ ABomberManSJCharacter::ABomberManSJCharacter()
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
-	AvailableBombs = 1;
-	BombPower = 1;
-	IsDead = false;
-
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
@@ -39,6 +36,13 @@ void ABomberManSJCharacter::BeginPlay()
 
 	FVector temp;
 	UGameplayStatics::GetActorOfClass(GetWorld(), AWallBase::StaticClass())->GetActorBounds(false, temp, WallExtent);
+
+	UBomberManSJGameInstance* gameInstance = Cast<UBomberManSJGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	AvailableBombs = gameInstance->AvailableBombs[0];
+	BombPower = gameInstance->BombPower[0];
+	Score = gameInstance->Score[0];
+	IsDead = false;
+	PlayerName = "Player 1";
 }
 
 void ABomberManSJCharacter::Tick(float DeltaSeconds)
@@ -48,7 +52,7 @@ void ABomberManSJCharacter::Tick(float DeltaSeconds)
 
 void ABomberManSJCharacter::PlaceBomb()
 {
-	if (AvailableBombs > 0 && !IsDead)
+	if (AvailableBombs > 0)
 	{
 		ABomb* currBomb = GetWorld()->SpawnActor<ABomb>(BombClass, CurrTilePos, FRotator::ZeroRotator);
 		currBomb->ParentPlayer = this;
@@ -57,3 +61,4 @@ void ABomberManSJCharacter::PlaceBomb()
 		AvailableBombs--;
 	}
 }
+

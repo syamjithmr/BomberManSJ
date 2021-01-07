@@ -10,3 +10,4 @@ ABomberManSJGameMode::ABomberManSJGameMode()
 	// use our custom PlayerController class
 	PlayerControllerClass = ABomberManSJPlayerController::StaticClass();
 }
+

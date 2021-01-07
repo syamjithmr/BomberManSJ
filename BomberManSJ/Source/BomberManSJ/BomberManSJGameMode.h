@@ -13,6 +13,7 @@ class ABomberManSJGameMode : public AGameModeBase
 
 public:
 	ABomberManSJGameMode();
+
 };
 
 

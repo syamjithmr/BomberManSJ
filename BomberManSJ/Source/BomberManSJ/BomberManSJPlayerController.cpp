@@ -2,6 +2,8 @@
 
 #include "BomberManSJPlayerController.h"
 #include "BomberManSJCharacter.h"
+#include "BomberManSJGameManager.h"
+#include "Kismet/GameplayStatics.h"
 
 ABomberManSJPlayerController::ABomberManSJPlayerController()
 {
@@ -19,7 +21,6 @@ void ABomberManSJPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	
 	int32 id = GetLocalPlayer()->GetControllerId();
-	UE_LOG(LogTemp, Warning, TEXT("%d"), id)
 	if (id == 0)
 	{
 		InputComponent->BindAction("PlaceBombP1", EInputEvent::IE_Pressed, this, &ABomberManSJPlayerController::PlaceBomb);
@@ -34,19 +35,24 @@ void ABomberManSJPlayerController::SetupInputComponent()
 		InputComponent->BindAxis("MoveForwardP2", this, &ABomberManSJPlayerController::MoveForward);
 		InputComponent->BindAxis("MoveRightP2", this, &ABomberManSJPlayerController::MoveRight);
 	}
+
+	GameManager = Cast<ABomberManSJGameManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ABomberManSJGameManager::StaticClass()));
 }
 
 void ABomberManSJPlayerController::MoveForward(float MoveRate)
 {
-	GetPawn()->AddMovementInput(FVector::ForwardVector, MoveRate);
+	if(!GameManager->IsWon && !GameManager->IsDraw)
+		GetPawn()->AddMovementInput(FVector::ForwardVector, MoveRate);
 }
 
 void ABomberManSJPlayerController::MoveRight(float MoveRate)
 {
-	GetPawn()->AddMovementInput(FVector::RightVector, MoveRate);
+	if (!GameManager->IsWon && !GameManager->IsDraw)
+		GetPawn()->AddMovementInput(FVector::RightVector, MoveRate);
 }
 
 void ABomberManSJPlayerController::PlaceBomb()
 {
-	Cast<ABomberManSJCharacter>(GetPawn())->PlaceBomb();
+	if (!GameManager->IsWon && !GameManager->IsDraw)
+		Cast<ABomberManSJCharacter>(GetPawn())->PlaceBomb();
 }

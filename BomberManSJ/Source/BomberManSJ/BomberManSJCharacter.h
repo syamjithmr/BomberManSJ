@@ -29,6 +29,11 @@ public:
 		int BombPower;
 	FVector WallExtent;
 
+	UPROPERTY(BlueprintReadWrite)
+		FString PlayerName;
+	UPROPERTY(BlueprintReadWrite)
+		int Score;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

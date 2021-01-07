@@ -20,6 +20,8 @@ protected:
 	virtual void SetupInputComponent() override;
 	// End PlayerController interface
 
+	class ABomberManSJGameManager* GameManager;
+
 	//Methods added by me.
 	void MoveForward(float MoveRate);
 	void MoveRight(float MoveRate);
