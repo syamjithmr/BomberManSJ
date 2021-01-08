@@ -1,112 +1,58 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BomberManSJPlayerController.h"
-#include "Blueprint/AIBlueprintHelperLibrary.h"
-#include "Runtime/Engine/Classes/Components/DecalComponent.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
 #include "BomberManSJCharacter.h"
-#include "Engine/World.h"
+#include "BomberManSJGameManager.h"
+#include "Kismet/GameplayStatics.h"
 
 ABomberManSJPlayerController::ABomberManSJPlayerController()
 {
-	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Crosshairs;
 }
 
 void ABomberManSJPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
-
-	// keep updating the destination every tick while desired
-	if (bMoveToMouseCursor)
-	{
-		MoveToMouseCursor();
-	}
 }
 
 void ABomberManSJPlayerController::SetupInputComponent()
 {
 	// set up gameplay key bindings
 	Super::SetupInputComponent();
-
-	InputComponent->BindAction("SetDestination", IE_Pressed, this, &ABomberManSJPlayerController::OnSetDestinationPressed);
-	InputComponent->BindAction("SetDestination", IE_Released, this, &ABomberManSJPlayerController::OnSetDestinationReleased);
-
-	// support touch devices 
-	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &ABomberManSJPlayerController::MoveToTouchLocation);
-	InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &ABomberManSJPlayerController::MoveToTouchLocation);
-
-	InputComponent->BindAction("ResetVR", IE_Pressed, this, &ABomberManSJPlayerController::OnResetVR);
-}
-
-void ABomberManSJPlayerController::OnResetVR()
-{
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
-}
-
-void ABomberManSJPlayerController::MoveToMouseCursor()
-{
-	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled())
+	
+	int32 id = GetLocalPlayer()->GetControllerId();
+	if (id == 0)
 	{
-		if (ABomberManSJCharacter* MyPawn = Cast<ABomberManSJCharacter>(GetPawn()))
-		{
-			/*if (MyPawn->GetCursorToWorld())
-			{
-				UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, MyPawn->GetCursorToWorld()->GetComponentLocation());
-			}*/
-		}
+		InputComponent->BindAction("PlaceBombP1", EInputEvent::IE_Pressed, this, &ABomberManSJPlayerController::PlaceBomb);
+
+		InputComponent->BindAxis("MoveForwardP1", this, &ABomberManSJPlayerController::MoveForward);
+		InputComponent->BindAxis("MoveRightP1", this, &ABomberManSJPlayerController::MoveRight);
 	}
 	else
 	{
-		// Trace to see what is under the mouse cursor
-		FHitResult Hit;
-		GetHitResultUnderCursor(ECC_Visibility, false, Hit);
+		InputComponent->BindAction("PlaceBombP2", EInputEvent::IE_Pressed, this, &ABomberManSJPlayerController::PlaceBomb);
 
-		if (Hit.bBlockingHit)
-		{
-			// We hit something, move there
-			SetNewMoveDestination(Hit.ImpactPoint);
-		}
+		InputComponent->BindAxis("MoveForwardP2", this, &ABomberManSJPlayerController::MoveForward);
+		InputComponent->BindAxis("MoveRightP2", this, &ABomberManSJPlayerController::MoveRight);
 	}
+
+	GameManager = Cast<ABomberManSJGameManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ABomberManSJGameManager::StaticClass()));
 }
 
-void ABomberManSJPlayerController::MoveToTouchLocation(const ETouchIndex::Type FingerIndex, const FVector Location)
+void ABomberManSJPlayerController::MoveForward(float MoveRate)
 {
-	FVector2D ScreenSpaceLocation(Location);
-
-	// Trace to see what is under the touch location
-	FHitResult HitResult;
-	GetHitResultAtScreenPosition(ScreenSpaceLocation, CurrentClickTraceChannel, true, HitResult);
-	if (HitResult.bBlockingHit)
-	{
-		// We hit something, move there
-		SetNewMoveDestination(HitResult.ImpactPoint);
-	}
+	if(!GameManager->IsWon && !GameManager->IsDraw)
+		GetPawn()->AddMovementInput(FVector::ForwardVector, MoveRate);
 }
 
-void ABomberManSJPlayerController::SetNewMoveDestination(const FVector DestLocation)
+void ABomberManSJPlayerController::MoveRight(float MoveRate)
 {
-	APawn* const MyPawn = GetPawn();
-	if (MyPawn)
-	{
-		float const Distance = FVector::Dist(DestLocation, MyPawn->GetActorLocation());
-
-		// We need to issue move command only if far enough in order for walk animation to play correctly
-		if ((Distance > 120.0f))
-		{
-			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, DestLocation);
-		}
-	}
+	if (!GameManager->IsWon && !GameManager->IsDraw)
+		GetPawn()->AddMovementInput(FVector::RightVector, MoveRate);
 }
 
-void ABomberManSJPlayerController::OnSetDestinationPressed()
+void ABomberManSJPlayerController::PlaceBomb()
 {
-	// set flag to keep updating destination until released
-	bMoveToMouseCursor = true;
-}
-
-void ABomberManSJPlayerController::OnSetDestinationReleased()
-{
-	// clear flag to indicate we should stop updating the destination
-	bMoveToMouseCursor = false;
+	if (!GameManager->IsWon && !GameManager->IsDraw)
+		Cast<ABomberManSJCharacter>(GetPawn())->PlaceBomb();
 }
