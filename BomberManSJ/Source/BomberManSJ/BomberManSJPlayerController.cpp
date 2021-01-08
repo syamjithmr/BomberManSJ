@@ -20,9 +20,11 @@ void ABomberManSJPlayerController::SetupInputComponent()
 	// set up gameplay key bindings
 	Super::SetupInputComponent();
 	
+	//Mapping Keyboard controls to Players.
 	int32 id = GetLocalPlayer()->GetControllerId();
 	if (id == 0)
 	{
+		//For Player 1.
 		InputComponent->BindAction("PlaceBombP1", EInputEvent::IE_Pressed, this, &ABomberManSJPlayerController::PlaceBomb);
 
 		InputComponent->BindAxis("MoveForwardP1", this, &ABomberManSJPlayerController::MoveForward);
@@ -30,6 +32,7 @@ void ABomberManSJPlayerController::SetupInputComponent()
 	}
 	else
 	{
+		//For Player 2.
 		InputComponent->BindAction("PlaceBombP2", EInputEvent::IE_Pressed, this, &ABomberManSJPlayerController::PlaceBomb);
 
 		InputComponent->BindAxis("MoveForwardP2", this, &ABomberManSJPlayerController::MoveForward);

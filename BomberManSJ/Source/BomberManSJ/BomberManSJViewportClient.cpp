@@ -11,7 +11,7 @@ bool UBomberManSJViewportClient::InputKey(const FInputKeyEventArgs& EventArgs)
 	}
 	else
 	{
-		// Propagate keyboard events to all players 
+		// Propagate keyboard events to all players, so that both Players can use Keyboard inputs.
 		UEngine* const Engine = GetOuterUEngine();
 		int32 const NumPlayers = Engine ? Engine->GetNumGamePlayers(this) : 0;
 		bool bRetVal = false;

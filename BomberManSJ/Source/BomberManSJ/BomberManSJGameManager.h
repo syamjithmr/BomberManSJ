@@ -21,45 +21,64 @@ public:
 	//Time to be displayed in In-Game HUD.
 	UPROPERTY(BlueprintReadOnly)
 		FString TimeRemainingText;
-	int minutes;
-	int seconds;
-	void ConvertSecondsToMinutes();
-	//Timer to countdown to TimeTillRescue.
+	//Timer to countdown TimeRemaining.
 	FTimerHandle TimeRemainingTimerHandle;
 	void UpdateTimeRemaining();
+	//To Resume the timer after InitialLaunch.
+	UFUNCTION(BlueprintCallable)
+		void UnpauseTimer();
 
 	bool IsWon;
 	//GameWonUI Component.
 	UPROPERTY(EditAnywhere, Category = "Widgets")
 		TSubclassOf<class UUserWidget> GameWonUIClass;
-	UUserWidget* GameWonUI;
+	//Called when a player is won the round. Overridden in Blueprint.
 	UFUNCTION(BlueprintNativeEvent)
 		void GameWon(class ABomberManSJCharacter* Winner);
 	virtual void GameWon_Implementation(class ABomberManSJCharacter* Winner);
+	//Winne's name.
 	UPROPERTY(BlueprintReadOnly)
 		FString WinnerName;
 
 	bool IsDraw;
-	//GameWonUI Component.
+	//GameDrawUI Component.
 	UPROPERTY(EditAnywhere, Category = "Widgets")
 		TSubclassOf<class UUserWidget> GameDrawUIClass;
-	UUserWidget* GameDrawUI;
+	//Called when the round is a Draw. Overridden in Blueprint.
 	UFUNCTION(BlueprintNativeEvent)
 		void GameDraw();
 	void GameDraw_Implementation();
 
+	//If the blast included another Bomb object.
 	UPROPERTY(BlueprintReadWrite)
 		bool BlastIsChained;
+	//If the Blast killed a Player.
 	UPROPERTY(BlueprintReadWrite)
 		bool BlastKilledOne;
+	//Check which players are dead, and decide Win/Draw condition.
 	UFUNCTION(BlueprintCallable)
 		void CheckPlayersDeadStatus();
 
-	void UpdatePlayerStats();
+	//Update the player Stats in GameInstance, to carry over to the next round.
+	UFUNCTION(BlueprintCallable)
+		void UpdatePlayerStats();
+	//Add powerips to the level on game start.
+	void AddPowerUps();
+	UPROPERTY(EditAnywhere)
+		int PowerUpSpawnProbability;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	int minutes;
+	int seconds;
+	//Convert TimeRemaining to mm:ss format for displaying in the HUD.
+	void ConvertSecondsToMinutes();
+
+	UUserWidget* GameWonUI;
+
+	UUserWidget* GameDrawUI;
 
 public:	
 	// Called every frame
