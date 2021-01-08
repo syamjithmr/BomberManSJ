@@ -20,4 +20,4 @@ This Game was created with Unreal Engine in 5 Days(total of 39 hours). I have us
 - [**Local Multiplayer using Keyboard**](https://michaeljcole.github.io/wiki.unrealengine.com/Local_Multiplayer_Tips/)
 
 ### Note:
-Open the [.uproject](BomberManSJ/BomberManSJ/BomberManSJ.uproject) file to bulid the project with Unreal for first time after cloning.
+Open the [.uproject](BomberManSJ/BomberManSJ.uproject) file to bulid the project with Unreal for first time after cloning.
