@@ -17,6 +17,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		bool IsBreakabale;
+	UPROPERTY(EditAnywhere)
+		TArray<TSubclassOf<class APowerUpBase>> PowerUpArray;
+	UPROPERTY(BlueprintReadOnly)
+		APowerUpBase* PowerUp;
+	void CreatePowerUp();
 
 protected:
 	// Called when the game starts or when spawned

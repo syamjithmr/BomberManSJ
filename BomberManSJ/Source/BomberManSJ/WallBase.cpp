@@ -2,6 +2,8 @@
 
 
 #include "WallBase.h"
+#include "PowerUpBase.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AWallBase::AWallBase()
@@ -11,6 +13,8 @@ AWallBase::AWallBase()
 
 	WallMesh = CreateDefaultSubobject<UStaticMeshComponent>("Wall Mesh");
 	WallMesh->SetupAttachment(RootComponent);
+
+	PowerUp = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -27,3 +31,14 @@ void AWallBase::Tick(float DeltaTime)
 
 }
 
+void AWallBase::CreatePowerUp()
+{
+	int PowerUpIndex = UKismetMathLibrary::RandomIntegerInRange(0, PowerUpArray.Num() - 1);
+	if (PowerUpArray.Num() != 0)
+	{
+		UClass* PowerUpClass = PowerUpArray[PowerUpIndex].Get();
+		PowerUp = GetWorld()->SpawnActor<APowerUpBase>(PowerUpClass, GetTransform());
+		//PowerUp->SetActorRelativeLocation(GetActorLocation());
+		PowerUp->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+	}
+}

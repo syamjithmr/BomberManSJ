@@ -56,6 +56,9 @@ public:
 		void CheckPlayersDeadStatus();
 
 	void UpdatePlayerStats();
+	void AddPowerUps();
+	UPROPERTY(EditAnywhere)
+		int PowerUpSpawnProbability;
 
 protected:
 	// Called when the game starts or when spawned

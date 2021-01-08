@@ -4,7 +4,9 @@
 #include "BomberManSJGameManager.h"
 #include "BomberManSJCharacter.h"
 #include "BomberManSJGameInstance.h"
+#include "WallBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Blueprint/UserWidget.h"
 
 // Sets default values
@@ -19,6 +21,7 @@ ABomberManSJGameManager::ABomberManSJGameManager()
 	IsDraw = false;
 	BlastIsChained = false;
 	BlastKilledOne = false;
+	PowerUpSpawnProbability = 5;
 }
 
 // Called when the game starts or when spawned
@@ -29,6 +32,8 @@ void ABomberManSJGameManager::BeginPlay()
 	ConvertSecondsToMinutes();
 	//Start the timer for counting down TimeTillRescue.
 	GetWorldTimerManager().SetTimer(TimeRemainingTimerHandle, this, &ABomberManSJGameManager::UpdateTimeRemaining, 1.0f, true);
+
+	AddPowerUps();
 }
 
 // Called every frame
@@ -100,6 +105,25 @@ void ABomberManSJGameManager::UpdatePlayerStats()
 	gameInstance->AvailableBombs[1] = Player2->AvailableBombs;
 	gameInstance->BombPower[1] = Player2->BombPower;
 	gameInstance->Score[1] = Player2->Score;
+}
+
+void ABomberManSJGameManager::AddPowerUps()
+{
+	TArray<AActor*> wallsInWorld;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AWallBase::StaticClass(), wallsInWorld);
+	int maxPowerUps = wallsInWorld.Num() / 3;
+	for (int i = 0; i < wallsInWorld.Num(); i++)
+	{
+		AWallBase* wall = Cast<AWallBase>(wallsInWorld[i]);
+		if (wall->IsBreakabale)
+		{
+			if (UKismetMathLibrary::RandomIntegerInRange(0, PowerUpSpawnProbability) == 0&& maxPowerUps>0)
+			{
+				wall->CreatePowerUp();
+				maxPowerUps--;
+			}
+		}
+	}
 }
 
 void ABomberManSJGameManager::UpdateTimeRemaining()
