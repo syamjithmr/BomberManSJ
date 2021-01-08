@@ -22,6 +22,7 @@ void APowerUpBase::BeginPlay()
 	Super::BeginPlay();
 
 	SetActorHiddenInGame(true);
+	//To stop the Power up from getting destroyed in the blast for the first time.
 	SetActorEnableCollision(false);
 }
 

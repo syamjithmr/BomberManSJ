@@ -7,7 +7,8 @@
 
 ABomberManSJGameMode::ABomberManSJGameMode()
 {
-	// use our custom PlayerController class
+	// Use our custom PlayerController class
 	PlayerControllerClass = ABomberManSJPlayerController::StaticClass();
+	//Player 2 is created in the GameMode Blueprint.
 }
 

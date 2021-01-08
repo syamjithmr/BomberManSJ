@@ -13,8 +13,6 @@ ABomb::ABomb()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//RootComponent = CreateDefaultSubobject<USceneComponent>("Root Component");
-
 	BombMesh = CreateDefaultSubobject<UStaticMeshComponent>("Bomb Mesh");
 	BombMesh->SetupAttachment(RootComponent);
 
@@ -45,64 +43,6 @@ void ABomb::InitBlastLocations()
 	AddBlastLocationsInDirection(FVector::RightVector);
 	AddBlastLocationsInDirection(FVector::ForwardVector);
 	AddBlastLocationsInDirection(FVector::BackwardVector);
-
-	//int blastLength = BombPower;
-	//FHitResult hitResult;
-	//FVector start = GetActorLocation();// +FVector::LeftVector * (BombExtent.Y + 10);
-	//FVector end = GetActorLocation() + FVector::LeftVector * ParentPlayer->WallExtent.Y * 2 * BombPower;
-	//if (GetWorld()->LineTraceSingleByObjectType(hitResult, start, end, FCollisionObjectQueryParams::AllStaticObjects))
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("Actor Name: %s"), *hitResult.GetActor()->GetFName().ToString())
-	//	
-	//	blastLength = ((hitResult.ImpactPoint - GetActorLocation()).Size() - ParentPlayer->WallExtent.Y) / (ParentPlayer->WallExtent.Y * 2);
-	//}
-	//UE_LOG(LogTemp, Warning, TEXT("Blast Length: %d"), blastLength);
-	//for (int i = 1; i <= blastLength; i++)
-	//{
-	//	BlastLocations.Add(GetActorLocation() + FVector::LeftVector * ParentPlayer->WallExtent.Y * 2 * i);
-	//}
-
-	//blastLength = BombPower;
-	//start = GetActorLocation();// +FVector::RightVector * (BombExtent.Y + 10);
-	//end = GetActorLocation() + FVector::RightVector * ParentPlayer->WallExtent.Y * 2 * BombPower;
-	//if (GetWorld()->LineTraceSingleByObjectType(hitResult, start, end, FCollisionObjectQueryParams::AllStaticObjects))
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("Actor Name: %s"), *hitResult.GetActor()->GetFName().ToString())
-
-	//		blastLength = ((hitResult.ImpactPoint - GetActorLocation()).Size() - ParentPlayer->WallExtent.Y) / (ParentPlayer->WallExtent.Y * 2);
-	//}
-	//for (int i = 1; i <= blastLength; i++)
-	//{
-	//	BlastLocations.Add(GetActorLocation() + FVector::RightVector * ParentPlayer->WallExtent.Y * 2 * i);
-	//}
-
-	//blastLength = BombPower;
-	//start = GetActorLocation();// +FVector::ForwardVector * (BombExtent.X + 10);
-	//end = GetActorLocation() + FVector::ForwardVector * ParentPlayer->WallExtent.X * 2 * BombPower;
-	//if (GetWorld()->LineTraceSingleByObjectType(hitResult, start, end, FCollisionObjectQueryParams::AllStaticObjects))
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("Actor Name: %s"), *hitResult.GetActor()->GetFName().ToString())
-
-	//		blastLength = ((hitResult.ImpactPoint - GetActorLocation()).Size() - ParentPlayer->WallExtent.X) / (ParentPlayer->WallExtent.X * 2);
-	//}
-	//for (int i = 1; i <= blastLength; i++)
-	//{
-	//	BlastLocations.Add(GetActorLocation() + FVector::ForwardVector * ParentPlayer->WallExtent.X * 2 * i);
-	//}
-
-	//blastLength = BombPower;
-	//start = GetActorLocation();// +FVector::BackwardVector * (BombExtent.X + 10);
-	//end = GetActorLocation() + FVector::BackwardVector * ParentPlayer->WallExtent.X * 2 * BombPower;
-	//if (GetWorld()->LineTraceSingleByObjectType(hitResult, start, end, FCollisionObjectQueryParams::AllStaticObjects))
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("Actor Name: %s"), *hitResult.GetActor()->GetFName().ToString())
-
-	//		blastLength = ((hitResult.ImpactPoint - GetActorLocation()).Size() - ParentPlayer->WallExtent.X) / (ParentPlayer->WallExtent.X * 2);
-	//}
-	//for (int i = 1; i <= blastLength; i++)
-	//{
-	//	BlastLocations.Add(GetActorLocation() + FVector::BackwardVector * ParentPlayer->WallExtent.X * 2 * i);
-	//}
 }
 
 void ABomb::AddBlastLocationsInDirection(FVector Direction)
@@ -111,19 +51,22 @@ void ABomb::AddBlastLocationsInDirection(FVector Direction)
 	FHitResult hitResult;
 	FVector start = GetActorLocation();
 	FVector end = GetActorLocation() + Direction * ParentPlayer->WallExtent.X * 2 * BombPower;
+
+	//Casting a ray from bomb location to given direction.
 	if (GetWorld()->LineTraceSingleByObjectType(hitResult, start, end, FCollisionObjectQueryParams::AllStaticObjects))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Actor Name: %s"), *hitResult.GetActor()->GetFName().ToString())
 
+		//Stop the blast When a wall is hit.
 		blastLength = ((hitResult.ImpactPoint - GetActorLocation()).Size()) / (ParentPlayer->WallExtent.X * 2);
-		//AWallBase* wall = Cast<AWallBase>(hitResult.GetActor());
 		if (AWallBase* wall = Cast<AWallBase>(hitResult.GetActor()))
 		{
+			//If it is a breakable wall, that wall is also icluded in the blast.
 			if (wall->IsBreakabale)
 				blastLength++;
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Blast Length: %d"), blastLength);
+	//Add Blast locations to the Array.
 	for (int i = 1; i <= blastLength; i++)
 	{
 		BlastLocations.Add(GetActorLocation() + Direction * ParentPlayer->WallExtent.X * 2 * i);

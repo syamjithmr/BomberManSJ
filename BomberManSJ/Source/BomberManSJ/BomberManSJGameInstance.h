@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// GameInstance class is used to store data to be carried over to several rounds.
 
 #pragma once
 
@@ -17,12 +17,14 @@ class BOMBERMANSJ_API UBomberManSJGameInstance : public UGameInstance
 public:
 	UBomberManSJGameInstance();
 
+	//These properties store data of both players.
 	UPROPERTY(BlueprintReadWrite)
 		TArray<int> Score;
 	UPROPERTY(BlueprintReadWrite)
 		TArray<int> BombPower;
 	UPROPERTY(BlueprintReadWrite)
 		TArray<int> AvailableBombs;
+	//Decides if this is the first round after launching the game.
 	UPROPERTY(BlueprintReadWrite)
 		bool InitialLaunch;
 };

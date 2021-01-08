@@ -33,12 +33,12 @@ void AWallBase::Tick(float DeltaTime)
 
 void AWallBase::CreatePowerUp()
 {
+	//Create a Random PowerUp and attach that to this Wall.
 	int PowerUpIndex = UKismetMathLibrary::RandomIntegerInRange(0, PowerUpArray.Num() - 1);
 	if (PowerUpArray.Num() != 0)
 	{
 		UClass* PowerUpClass = PowerUpArray[PowerUpIndex].Get();
 		PowerUp = GetWorld()->SpawnActor<APowerUpBase>(PowerUpClass, GetTransform());
-		//PowerUp->SetActorRelativeLocation(GetActorLocation());
 		PowerUp->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 	}
 }

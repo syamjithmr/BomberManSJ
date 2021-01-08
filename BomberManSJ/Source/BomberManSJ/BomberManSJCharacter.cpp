@@ -37,6 +37,8 @@ void ABomberManSJCharacter::BeginPlay()
 	FVector temp;
 	UGameplayStatics::GetActorOfClass(GetWorld(), AWallBase::StaticClass())->GetActorBounds(false, temp, WallExtent);
 
+	//Set initial valus from the GameInstance. These are the values carried over from previous round.
+	//The values set here are for Player 1. Player 2 values are set in GameMode, after calling CreatePlayer().
 	UBomberManSJGameInstance* gameInstance = Cast<UBomberManSJGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	AvailableBombs = gameInstance->AvailableBombs[0];
 	BombPower = gameInstance->BombPower[0];
@@ -52,12 +54,15 @@ void ABomberManSJCharacter::Tick(float DeltaSeconds)
 
 void ABomberManSJCharacter::PlaceBomb()
 {
+	//If bombs are available, then spawn a bomb and initialize the BlastLocations array.
+	//The bomb will blast after a Timer goes off. Te timer is set in Bomb Blueprint.
 	if (AvailableBombs > 0)
 	{
 		ABomb* currBomb = GetWorld()->SpawnActor<ABomb>(BombClass, CurrTilePos, FRotator::ZeroRotator);
 		currBomb->ParentPlayer = this;
 		currBomb->BombPower = BombPower;
 		currBomb->InitBlastLocations();
+		//AvailableBombs is incremented once the blast is happened.
 		AvailableBombs--;
 	}
 }
