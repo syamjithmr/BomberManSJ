@@ -2,6 +2,7 @@
 **Classic BomberMan game's clone**
 
 This Game was created with Unreal Engine 4(v4.25.3) in 5 Days(total of 39 hours). I have used Top Down template in Unreal as a starting point. All the template files are moved to BomberManSJ/Content/TemplateFiles folder. I have added additional code in the template C++ code and they are commented appropriately. All BluePrint codes are done by me.
+
 Download the packaged Game and Prerequisites [here](BomberManSJ/DistributionPackage/).
 
 ## Following is the Structure of Classes:
